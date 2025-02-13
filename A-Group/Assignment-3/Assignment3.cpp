@@ -1,20 +1,3 @@
-Conversation opened. 1 read message.
-
-Skip to content
-Using Gmail with screen readers
-in:sent 
-26 of 466
-(no subject)
-Inbox
-
-Arinjay Patil <arinjaypatil.2004@gmail.com>
-Attachments
-21 Jan 2025, 10:44
-to me
-
-
-One attachment
-  • Scanned by Gmail
 #include<bits/stdc++.h>
 using namespace std;
 
