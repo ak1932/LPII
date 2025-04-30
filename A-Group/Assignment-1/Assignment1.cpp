@@ -1,97 +1,127 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
-void addEdge (vector<vector<int>> &adj, int s, int t){
+void addEdge(vector<vector<int>> &adj, int s, int t){
     adj[s].push_back(t);
     adj[t].push_back(s);
 }
 
-
-void DFS (vector<vector<int>> &adj, vector<int> &vis, int idx, int s, int &flag){
-    cout<<idx<<" ";
+bool DFS(vector<vector<int>> adj, vector<int> &vis, int idx, int targ, vector<int> &path){
+    cout<<idx<<endl;
     vis[idx] = 1;
-    if(idx == s){
-        flag = 1;
-        return;
-   }
-    
-    // cout<<idx<<" ";
-    for(auto it : adj[idx]){
-        if(vis[it] == 0){
-            if(flag == 1){
-                return;
-             }
-             DFS(adj, vis, it, s, flag);
-             
+    path.push_back(idx);
+
+    if(idx == targ){
+        return true;
+    }
+
+    for(auto i : adj[idx]){
+        if(!vis[i]){
+            if(DFS(adj, vis, i, targ, path)){
+                return true;
+            }
         }
     }
-}
 
-void BFS(vector<vector<int>> &adj, vector<int> &vis2, int &element){
-     queue<int> q;
-
-        q.push(0);
-        
-        vis2[0] = 1;
-
-        cout<<" BFS : ";
-        while(!q.empty()){
-            int e = q.front();
-            cout<<e<<" ";
-            if(e == element){
-                break;
-            }
-            q.pop();
-
-            for(auto it : adj[e]){
-                if(vis2[it] == 0){
-                    vis2[it] = 1;
-                    q.push(it);
-                }
-            }
-        }
+    path.pop_back();
+    return false;
 }
 
 
-int main() {
+bool BFS(vector<vector<int>> adj, vector<int> &vis, int s, int targ, vector<int> &path){
+    vector<int> parent(adj.size(), -1);
+    queue<int> q;
+   
 
-        int n;
-        cout<<"Enter the number of edges: ";
-        cin>>n;
+    q.push(s);
 
+    vis[s] = 1;
 
-        vector<vector<int>> adj(n+1);
-        
-        cout<<"Start Entering the pairs"<<endl;
-        for(int i=0; i<=n; i++){
-                cout<<"Enter first number ";
-                int s;
-                cin>>s;
-                cout<<"Enter second number ";
-                int t;
-                cin>>t;
-                addEdge(adj, s, t);
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+
+        for(auto it : adj[node]){
+            if(!vis[it]){
+                vis[it] = 1;
+                q.push(it);
+                parent[it] = node;
+            }
         }
+    }
 
-        vector<int> vis1(n+1, 0);
-        int flag = 0;
-        cout<<"Enter the element to search: ";
-        int element1;
-        cin>>element1;
-        cout<<" DFS : ";
-        DFS(adj, vis1, 0, element1 , flag);
 
-        cout<<endl;
+    if(!vis[targ]) return false;
 
-        vector<int> vis2(n+1, 0);
-        
-       cout<<"Enter the element to search: ";
-        int element2;
-        cin>>element2;
-        BFS (adj, vis2, element2);
 
-         
+    int i=targ;
+    while(i != -1){
+        path.push_back(i);
+        i = parent[i];
+    }
 
-     
+    reverse(path.begin(), path.end());
+
+    return true;
+}
+ 
+int main()
+{
+   
+    cout<<"Enter the number of node: ";
+    int n;
+    cin>>n;
+    
+    vector<vector<int>> adj(n+1);
+    for(int i=0; i<n; i++){
+        int s;
+        int t;
+        cout<<"Enter the first node: ";
+        cin>>s;
+        cout<<"Enter the second node: ";
+        cin>>t;
+        addEdge(adj, s, t);
+    }
+
+    int ch;
+    int d;
+    cout<<"Enter the destination node: ";
+    cin>>d;
+    while(true){
+        cout<<"1. DFS"<<endl;
+        cout<<"2. BFS"<<endl;
+        cout<<"Enter a choice: ";
+        cin>>ch;
+        vector<int> vis(n+1, 0);
+        vector<int> path;
+        int s;
+        cout<<"Enter start index ";
+        cin>>s;
+        if(ch == 1){
+              if(DFS(adj, vis, s, d, path )){
+                cout<<"Path: ";
+                for(int i=0; i<path.size(); i++){
+                    cout<<path[i]<<" ";
+                }cout<<endl;
+              }
+              else{
+                cout<<"No path possible"<<endl;
+              }
+        }
+        else if(ch == 2){
+            if(BFS(adj, vis, s , d, path )){
+              cout<<"Path: ";
+              for(int i=0; i<path.size(); i++){
+                  cout<<path[i]<<" ";
+              }cout<<endl;
+            }
+            else{
+              cout<<"No path possible"<<endl;
+            }
+      }
+      else{
+        break;
+      }
+    }
+   return 0;
 }

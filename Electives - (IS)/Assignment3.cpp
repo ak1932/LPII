@@ -76,6 +76,12 @@ void generateKeys(vector<int> key, vector<int> &K1, vector<int> &K2) {
     vector<int> k2_input = left;
     k2_input.insert(k2_input.end(), right.begin(), right.end());
     K2 = permute(k2_input, P8, 8);
+   for(int i=0; i<K1.size(); i++){
+    cout<<K1[i]<<" ";
+   }cout<<endl;
+   for(int i=0; i<K2.size(); i++){
+    cout<<K2[i]<<" ";
+   }cout<<endl;
 }
 
 
@@ -144,7 +150,7 @@ int main() {
           key.push_back(k);
     }
 
-    cout<<"Enter the 8 bit key: ";
+    cout<<"Enter the 8 bit Plain text: ";
     for(int i=0; i<8; i++){
           int t;
           cin>>t;
